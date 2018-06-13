@@ -68,13 +68,13 @@ def update_script(script_filename, new_path):
         # the case of too long shebangs (i.e. when a normal shebang would
         # exceed the char limit for Linux or Darwin).
         args = lines[0][9:].strip().split()
-        if not fix_args(args):
+        if not fix_args(args, new_path):
             return
 
         lines[1] = "'''exec' %s\n" % ' '.join(args)
     else:
         args = lines[0][2:].strip().split()
-        if not fix_args(args):
+        if not fix_args(args, new_path):
             return
 
         lines[0] = '#!%s\n' % ' '.join(args)
@@ -84,7 +84,7 @@ def update_script(script_filename, new_path):
         f.writelines(lines)
 
 
-def fix_args(args):
+def fix_args(args, new_path):
     """update an argv as found in a shebang"""
     if not args:
         return False
